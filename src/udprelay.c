@@ -89,6 +89,7 @@ static remote_ctx_t *new_remote(int fd, server_ctx_t *server_ctx);
 extern uint64_t tx;
 extern uint64_t rx;
 extern int vpn;
+extern void stat_update_cb();
 #endif
 
 extern int verbose;
@@ -737,6 +738,7 @@ remote_recv_cb(EV_P_ ev_io *w, int revents)
 #else
 #ifdef ANDROID
     rx += buf->len;
+    stat_update_cb();
 #endif
     // Construct packet
     brealloc(buf, buf->len + 3, buf_size);
@@ -1373,7 +1375,7 @@ init_udprelay(const char *server_host, const char *server_port,
 
     server_ctx_list[server_num++] = server_ctx;
 
-    return 0;
+    return serverfd;
 }
 
 void

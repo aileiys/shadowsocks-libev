@@ -493,7 +493,7 @@ stream_decrypt(buffer_t *ciphertext, cipher_ctx_t *cipher_ctx, size_t capacity)
                               ciphertext->len);
 
         if (left_len > 0) {
-            memcpy(cipher_ctx->chunk->data, ciphertext->data, left_len);
+            memcpy(cipher_ctx->chunk->data + cipher_ctx->chunk->len, ciphertext->data, left_len);
             memmove(ciphertext->data, ciphertext->data + left_len,
                     ciphertext->len - left_len);
             cipher_ctx->chunk->len += left_len;
@@ -505,7 +505,7 @@ stream_decrypt(buffer_t *ciphertext, cipher_ctx_t *cipher_ctx, size_t capacity)
 
         uint8_t *nonce   = cipher_ctx->nonce;
         size_t nonce_len = cipher->nonce_len;
-        plaintext->len -= nonce_len;
+        plaintext->len -= left_len;
 
         memcpy(nonce, cipher_ctx->chunk->data, nonce_len);
         cipher_ctx_set_nonce(cipher_ctx, nonce, nonce_len, 0);
