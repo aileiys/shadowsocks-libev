@@ -1,7 +1,7 @@
 /*
  * server.h - Define shadowsocks server's buffers and callbacks
  *
- * Copyright (C) 2013 - 2017, Max Lv <max.c.lv@gmail.com>
+ * Copyright (C) 2013 - 2018, Max Lv <max.c.lv@gmail.com>
  *
  * This file is part of the shadowsocks-libev.
  *
@@ -59,13 +59,15 @@ typedef struct server_ctx {
 #include <libnetfilter_conntrack/libnetfilter_conntrack_tcp.h>
 
 struct dscptracker {
-        struct nf_conntrack *ct;
-        long unsigned int mark;
-        unsigned int dscp;
-        unsigned int packet_count;
+    struct nf_conntrack *ct;
+    long unsigned int mark;
+    unsigned int dscp;
+    unsigned int packet_count;
 };
 
 #endif
+
+struct query;
 
 typedef struct server {
     int fd;
@@ -81,11 +83,11 @@ typedef struct server {
     struct listen_ctx *listen_ctx;
     struct remote *remote;
 
-    struct ResolvQuery *query;
+    struct query *query;
 
     struct cork_dllist_item entries;
 #ifdef USE_NFCONNTRACK_TOS
-    struct dscptracker* tracker;
+    struct dscptracker *tracker;
 #endif
 } server_t;
 
